@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponseTrait as ApiResponseTrait;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class RecetteController extends Controller
@@ -16,7 +17,8 @@ class RecetteController extends Controller
 
     //Recuperer la liste des recettes 
     public function index() {
-        $recettes = Recette::all();
+        // $recettes = Recette::all();
+        $recettes = Recette::with('denree')->get();
         if($recettes->isEmpty()){
             return $this->emptyResponse('La liste des recettes est vide');
         }
@@ -27,7 +29,7 @@ class RecetteController extends Controller
     public function show($id) {
         try {
             
-            $recette= Recette::find($id);
+            $recette= Recette::with('denree')->find($id);
             if(!$recette){
                 return $this->errorResponse('recette non trouvée');
             }else{
@@ -69,6 +71,9 @@ class RecetteController extends Controller
                 ]
             );
 
+            // Recuperation de l'utilisateur connecté 
+            $user = Auth::user() ;
+
             $categorie = Categorie::find($request->categorie_id);
             if(!$categorie){
                 return $this->errorResponse('categorie non trouvée');
@@ -80,7 +85,7 @@ class RecetteController extends Controller
                 $recette->temps_cuisson = $request->temps_cuisson;
                 $recette->etape_preparation = $request->etape_preparation;
                 $recette->categorie_id = $categorie->id;
-                $recette->user_id = 1;
+                $recette->user_id = $user->id;
                 // dd($recette);
                 if($recette->save()){
                     return $this->successResponse($recette, 'recette ajoutée avec success');
@@ -134,6 +139,9 @@ class RecetteController extends Controller
                 ]
             );
 
+            // Recuperation de l'utilisateur connecté 
+            $user = Auth::user() ;
+
             $categorie = Categorie::find($request->categorie_id);
             if(!$categorie){
                 return $this->errorResponse('categorie non trouvée');
@@ -146,7 +154,7 @@ class RecetteController extends Controller
                     $recette->temps_cuisson = $request->temps_cuisson;
                     $recette->etape_preparation = $request->etape_preparation;
                     $recette->categorie_id = $categorie->id;
-                    $recette->user_id = 1;
+                    $recette->user_id = $user->id;
                     // dd($recette);
                     if($recette->update()){
                         return $this->successResponse($recette, 'recette modifiée avec success');

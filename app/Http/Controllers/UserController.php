@@ -11,8 +11,10 @@ class UserController extends Controller
     use ApiResponseTrait;
 
     //Recuperer la liste des utilisateur 
+    
     public function index() {
-        $users =  User::all();
+        // $users =  User::all();
+        $users = User::with('recette')->get();
         if($users->isEmpty()){
             return $this->emptyResponse('La liste des utilisateur est vide');
         }
@@ -23,7 +25,8 @@ class UserController extends Controller
     public function show($id) {
         try {
             
-            $user= User::find($id);
+            // $user= User::find($id);
+            $user = User::with('recette')->find($id);
             if(!$user){
                 return $this->errorResponse('Utiliateur non trouvé');
                 // $code = Response::HTTP_BAD_REQUEST;
