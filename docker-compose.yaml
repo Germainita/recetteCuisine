@@ -1,0 +1,10 @@
+services:
+  poc_hpd:
+    build:
+      context: .
+      dockerfile: docker/dockerfile
+    container_name: recette_cuisine
+    restart: always
+    ports:
+      - 8001:8000
+    image: germainita/recette_cuisine:1.1

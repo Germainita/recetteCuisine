@@ -6,14 +6,14 @@ use App\Models\Categorie;
 use App\Models\Recette;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Traits\ApiResponseTrait as ApiResponseTrait;
+// use App\Traits\ApiResponseTrait as ApiResponseTrait;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class RecetteController extends Controller
 {
-    use ApiResponseTrait;
+    // use ApiResponseTrait;
 
     //Recuperer la liste des recettes 
     public function index() {

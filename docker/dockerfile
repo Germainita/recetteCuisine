@@ -1,0 +1,44 @@
+FROM php:8.2-apache
+
+#installation des extensions php
+RUN apt-get update && apt-get install -y \
+  git zip unzip libpng-dev \
+  libzip-dev libpq-dev
+
+RUN docker-php-ext-install pdo pdo_pgsql zip gd
+
+#installation du module apache pour la reecriture des url
+RUN a2enmod rewrite
+
+WORKDIR /var/www
+
+COPY . /var/www
+
+RUN chown -R www-data:www-data /var/www/storage
+
+
+# Installation de curl
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y curl
+
+# Ajout du référentiel NodeSource
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
+
+
+# Installation de Node.js
+RUN  apt-get install -y nodejs
+# ajout de composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# On utilise composer ici pour installer les dépendances de notre projet
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --optimize-autoloader --no-dev
+
+RUN npm install
+
+
+EXPOSE 8000
+
+# Copier la configuration Apache personnalisée
+COPY ./docker/apache.conf /etc/apache2/sites-available/000-default.conf
+
+ENTRYPOINT [ "bash","./docker/docker.sh" ]
+CMD ["apache2-foreground"]

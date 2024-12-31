@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Denree;
 use App\Models\Recette;
-use App\Traits\ApiResponseTrait as ApiResponseTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class DenreeController extends Controller
 {
-    use ApiResponseTrait;
 
     //Recuperer la liste des denrees 
     public function index() {

@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Categorie;
 use Illuminate\Http\Request;
-use App\Traits\ApiResponseTrait as ApiResponseTrait;
 use Exception;
 use Illuminate\Validation\ValidationException;
 
 class CategorieController extends Controller
 {
-    use ApiResponseTrait;
 
     //Recuperer la liste des categories 
     public function index() {

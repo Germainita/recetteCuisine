@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Response;
-use App\Traits\ApiResponseTrait as ApiResponseTrait;
 
 class UserController extends Controller
 {
-    use ApiResponseTrait;
 
     //Recuperer la liste des utilisateur 
     
